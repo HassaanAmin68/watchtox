@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- ==== META ==== -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login – WatchTox</title>
+  <meta name="description"
+        content="Login to WatchTox – earn cash by watching YouTube videos, claim lottery tickets and more.">
+  <meta name="theme-color" content="#1877F2">
+
+  <!-- ==== OPEN GRAPH (optional) ==== -->
+  <meta property="og:title" content="Login – WatchTox">
+  <meta property="og:description"
+        content="Access your WatchTox account – earn money while watching videos.">
+  <meta property="og:image" content="https://your‑domain.com/assets/og-login.jpg">
+  <meta property="og:url" content="https://your‑domain.com/login.html">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- ==== GOOGLE FONT ==== -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
+  <!-- ==== AOS – Animate On Scroll (CDN) ==== -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+  <!-- ==== GLOBAL STYLES (root vars + animations) ==== -->
+  <style>
+    :root{
+      --primary:#1877F2;          /* brand blue */
+      --primary-dark:#155db2;
+      --bg:#f0f2f5;
+      --card-bg:#fff;
+      --text:#050505;
+      --muted:#65676b;
+      --radius:.8rem;
+      --shadow:0 1px 2px rgba(0,0,0,.08);
+      --header-height:60px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:'Inter',sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.6;
+    }
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%;display:block}
+    button{cursor:pointer;border:none;background:none;font-family:inherit}
+    ul{list-style:none}
+    /* ==== HEADER ==== */
+    header{
+      height:var(--header-height);
+      background:#fff;
+      box-shadow:var(--shadow);
+      position:sticky;top:0;z-index:1000;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:0 1.5rem;
+    }
+    .logo{font-size:1.4rem;font-weight:700;color:var(--primary);}
+    nav ul{display:flex;gap:1.5rem}
+    nav a{
+      color:var(--muted);
+      font-weight:600;
+      position:relative;
+      transition:color .2s;
+    }
+    nav a:hover{color:var(--primary)}
+    nav a::after{
+      content:"";
+      position:absolute;
+      left:0;bottom:-3px;
+      width:0;height:2px;
+      background:var(--primary);
+      transition:width .3s;
+    }
+    nav a:hover::after{width:100%}
+    .hamburger{
+      display:none;
+      flex-direction:column;
+      gap:4px;
+      cursor:pointer;
+    }
+    .hamburger span{
+      width:24px;height:2px;background:#333;
+      transition:transform .3s,opacity .3s;
+    }
+    /* ==== MAIN CONTENT ==== */
+    .main{
+      display:flex;align-items:center;justify-content:center;
+      min-height:calc(100vh - var(--header-height));
+      padding:2rem 1rem;
+    }
+    .login-card{
+      background:var(--card-bg);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      width:100%;max-width:420px;
+      padding:2rem;
+      transition:transform .2s ease,box-shadow .2s ease;
+    }
+    .login-card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 8px 12px rgba(0,0,0,.15);
+    }
+    .login-card h2{
+      text-align:center;
+      margin-bottom:1.5rem;
+      color:var(--primary);
+      font-weight:600;
+    }
+    .form-group{
+      margin-bottom:1.2rem;
+      opacity:0;
+      animation:fadeUp .6s ease forwards;
+    }
+    .form-group:nth-child(1){animation-delay:.05s}
+    .form-group:nth-child(2){animation-delay:.10s}
+    .form-group:nth-child(3){animation-delay:.15s}
+    .form-group:nth-child(4){animation-delay:.20s}
+    .form-group label{
+      display:block;
+      margin-bottom:.4rem;
+      font-weight:600;
+      color:var(--muted);
+    }
+    .form-group input{
+      width:100%;
+      padding:.7rem 1rem;
+      border:1px solid #ddd;
+      border-radius:var(--radius);
+      font-size:1rem;
+      transition:border .2s,box-shadow .2s;
+    }
+    .form-group input:focus{
+      outline:none;
+      border-color:var(--primary);
+      box-shadow:0 0 0 3px rgba(24,119,242,.15);
+    }
+    .btn-primary{
+      width:100%;
+      background:var(--primary);
+      color:#fff;
+      padding:.9rem;
+      border-radius:var(--radius);
+      font-weight:600;
+      transition:background .2s ease,transform .1s ease;
+    }
+    .btn-primary:hover{
+      background:var(--primary-dark);
+      transform:scale(1.02);
+    }
+    .btn-primary:active{transform:scale(.97);}
+    .extra-links{
+      margin-top:1rem;
+      text-align:center;
+      font-size:.94rem;
+    }
+    .extra-links a{
+      color:var(--primary);
+      margin:0 .3rem;
+    }
+    .extra-links a:hover{text-decoration:underline;}
+    /* ==== RESPONSIVE ==== */
+    @media (max-width:768px){
+      .hamburger{display:flex}
+      nav ul{
+        display:none;
+        flex-direction:column;
+        background:#fff;
+        position:absolute;
+        top:var(--header-height);
+        left:0;width:100%;
+        box-shadow:0 4px 8px rgba(0,0,0,.08);
+      }
+      nav ul.show{display:flex}
+    }
+    /* ==== ANIMATIONS & MOTIONS ==== */
+    @keyframes fadeIn{to{opacity:1}}
+    .fade-in{animation:fadeIn .6s ease-out forwards;opacity:0}
+    @keyframes fadeUp{
+      from{opacity:0;transform:translateY(12px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+    .pwd-toggle{
+      cursor:pointer;
+      margin-left:4px;
+      transition:transform .2s;
+      user-select:none;
+    }
+    .pwd-toggle:hover{transform:rotate(20deg);}
+    /* Hamburger‑to‑X active state */
+    .hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
+    .hamburger.active span:nth-child(2){opacity:0;}
+    .hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(6px,-6px);}
+    html{scroll-behavior:smooth;}
+  </style>
+</head>
+
+<body>
+  <!-- ==================== HEADER ==================== -->
+  <header>
+    <div class="logo"><a href="../index.html">WatchTox</a></div>
+
+    <nav>
+      <ul id="nav-links">
+        <li><a href="login.html"
+               style="color:var(--primary);font-weight:600;">Login / Register</a></li>
+        <!-- add more nav links here if you like -->
+      </ul>
+    </nav>
+
+    <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </header>
+
+  <!-- ==================== MAIN (LOGIN FORM) ==================== -->
+  <main class="main fade-in">
+    <div class="login-card" data-aos="fade-up">
+      <h2>Login to WatchTox</h2>
+
+      <!-- No action attribute – we’ll POST with fetch -->
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="loginEmail">Email address</label>
+          <input type="email" id="loginEmail" name="email"
+                 placeholder="you@domain.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" name="password"
+                 placeholder="••••••••" required>
+          <span class="pwd-toggle" title="Show / hide password">👁️</span>
+        </div>
+
+        <button type="submit" class="btn-primary">Log In</button>
+
+        <div class="extra-links">
+          <a href="#" id="forgot">Forgot password?</a> |
+          <a href="register.html">Create account</a>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer style="background:#fff;margin-top:3rem;padding:2rem 1rem;text-align:center;font-size:.9rem;color:var(--muted);box-shadow:0 -1px 2px rgba(0,0,0,.04);">
+    <p>&copy; 2026 WatchTox. All rights reserved.</p>
+    <p>
+      <a href="/terms">Terms of Service</a> |
+      <a href="/privacy">Privacy Policy</a> |
+      <a href="/contact">Contact Us</a>
+    </p>
+    <p>Follow us:
+      <a href="https://facebook.com/WatchTox" target="_blank">Facebook</a> |
+      <a href="https://twitter.com/WatchTox" target="_blank">Twitter</a> |
+      <a href="https://instagram.com/WatchTox" target="_blank">Instagram</a>
+    </p>
+  </footer>
+
+  <!-- ==== JAVASCRIPT – hamburger, password‑toggle, login fetch, AOS init ==== -->
+  <script>
+    // ---------- Hamburger – toggle + X animation ----------
+    const hamburger = document.getElementById('hamburger');
+    const navLinks  = document.getElementById('nav-links');
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('show');
+      hamburger.classList.toggle('active');
+    });
+
+    // ---------- Password‑visibility toggle ----------
+    const eye = document.querySelector('.pwd-toggle');
+    eye.addEventListener('click', () => {
+      const pwdInput = document.getElementById('loginPassword');
+      const type = pwdInput.type === 'password' ? 'text' : 'password';
+      pwdInput.type = type;
+      // swap eye emoji (optional)
+      eye.textContent = type === 'password' ? '👁️' : '🙈';
+    });
+
+    // ---------- Login submit ----------
+    const form = document.getElementById('loginForm');
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+
+      const email    = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+
+      try {
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          // Store the JWT for future authenticated calls
+          localStorage.setItem('jwt', result.token);
+          alert('✅ Logged in! Redirecting…');
+          // redirect – you can change the target if you need a different landing page
+          window.location.href = '/pages/earnings.html';
+        } else {
+          alert('❌ Login failed: ' + (result.error || result.message || 'Unknown error'));
+        }
+      } catch (err) {
+        console.error('Login request error:', err);
+        alert('❌ Network error – see console for details.');
+      }
+    });
+
+    // ---------- AOS initialization ----------
+    document.addEventListener('DOMContentLoaded', () => {
+      AOS.init({
+        once: true,
+        duration: 600,
+        easing: 'ease-out-quart'
+      });
+    });
+  </script>
+
+  <!-- AOS script (must be after your own JS so init runs after it loads) -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+</body>
+</html>

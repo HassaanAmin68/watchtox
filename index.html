@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- ==== META INFORMATION ==== -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WatchTox – Earn Money Watching YouTube Videos</title>
+  <meta name="description"
+        content="Watch YouTube videos, earn cash, buy lottery tickets and win amazing prizes. Advertisers get cheap video views.">
+  <meta name="theme-color" content="#1877F2">
+
+  <!-- ==== OPEN GRAPH (for sharing on FB / Twitter) ==== -->
+  <meta property="og:title" content="WatchTox – Earn Money Watching YouTube Videos">
+  <meta property="og:description"
+        content="Watch YouTube videos, earn cash, buy lottery tickets and win amazing prizes.">
+  <meta property="og:image" content="https://your‑domain.com/assets/og-image.jpg">
+  <meta property="og:url" content="https://your‑domain.com/">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- ==== FONTS ==== -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- ==== AOS – Animate on Scroll (CDN) ==== -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+  <!-- ==== STYLES ==== -->
+  <style>
+    :root {
+      --primary: #1877F2;      /* Facebook‑blue */
+      --primary-dark: #155db2;
+      --bg: #f0f2f5;
+      --card-bg: #fff;
+      --text: #050505;
+      --muted: #65676b;
+      --radius: .8rem;
+      --shadow: 0 1px 2px rgba(0,0,0,.08);
+      --header-height: 60px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%;display:block}
+    button{cursor:pointer;border:none;background:none;font-family:inherit}
+    ul{list-style:none}
+    /* ==== LAYOUT ==== */
+    header{
+      height:var(--header-height);
+      background:#fff;
+      box-shadow:var(--shadow);
+      position:sticky;top:0;z-index:1000;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:0 1.5rem;
+    }
+    .logo{font-size:1.4rem;font-weight:700;color:var(--primary);}
+    nav ul{display:flex;gap:1.5rem}
+    nav a{
+      color:var(--muted);
+      font-weight:600;
+      position:relative;
+      transition:color .2s;
+    }
+    nav a:hover{color:var(--primary)}
+    nav a::after{
+      content:"";
+      position:absolute;
+      left:0;bottom:-3px;
+      width:0;height:2px;
+      background:var(--primary);
+      transition:width .3s;
+    }
+    nav a:hover::after{width:100%}
+    .hamburger{
+      display:none;
+      flex-direction:column;
+      gap:4px;
+      cursor:pointer;
+    }
+    .hamburger span{
+      width:24px;height:2px;background:#333;
+      transition:transform .3s,opacity .3s;
+    }
+    /* ==== HERO ==== */
+    .hero{
+      background:url('https://images.unsplash.com/photo-1517433456452-f9633a875f6f?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
+      color:#fff;
+      text-align:center;
+      padding:8rem 1rem 6rem;
+    }
+    .hero h1{
+      font-size:2.8rem;
+      margin-bottom:.5rem;
+      color:var(--primary);
+    }
+    .hero p{
+      font-size:1.2rem;
+      margin-bottom:2rem;
+      color:var(--primary);
+    }
+    .hero .cta{
+      background:#fff;
+      color:var(--primary);
+      padding:.9rem 1.8rem;
+      border-radius:var(--radius);
+      font-weight:600;
+      transition:background .2s,transform .2s;
+      display:inline-block;
+    }
+    .hero .cta:hover{
+      background:#f0f0f0;
+      transform:scale(1.05);
+    }
+    /* ==== SECTION CARDS ==== */
+    .section{padding:3rem 1rem}
+    .section-title{
+      text-align:center;
+      margin-bottom:2rem;
+      font-size:2rem;
+      color:var(--primary);
+    }
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:1.5rem;
+      max-width:1200px;
+      margin:auto;
+    }
+    .card{
+      background:var(--card-bg);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:1.8rem;
+      text-align:center;
+      transition:transform .2s,box-shadow .2s;
+    }
+    .card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 4px 12px rgba(0,0,0,.12);
+    }
+    .card img{width:80px;margin:auto;margin-bottom:1rem}
+    .card h3{margin:.8rem 0;font-size:1.25rem;color:var(--primary)}
+    .card p{font-size:.95rem;color:var(--muted)}
+    /* ==== LEADERBOARD ==== */
+    .leaderboard{
+      max-width:800px;margin:auto;
+      background:var(--card-bg);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .leaderboard table{width:100%;border-collapse:collapse}
+    .leaderboard th,.leaderboard td{
+      padding:.9rem 1rem;
+      text-align:left;
+    }
+    .leaderboard th{
+      background:var(--primary);
+      color:#fff;
+    }
+    .leaderboard tr:nth-child(even){background:#fafafa}
+    /* ==== FAQ ==== */
+    .faq{max-width:800px;margin:auto}
+    .faq-item{margin-bottom:1.2rem}
+    .faq-question{
+      background:#fff;
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:.9rem 1rem;
+      cursor:pointer;
+      font-weight:600;
+      position:relative;
+      transition:background .2s;
+    }
+    .faq-question:hover{background:#f9f9f9}
+    .faq-question::after{
+      content:'▸';
+      position:absolute;right:1rem;
+      transition:transform .2s;
+    }
+    .faq-question.active::after{transform:rotate(90deg)}
+    .faq-answer{
+      max-height:0;
+      overflow:hidden;
+      background:#f9f9f9;
+      border-radius:0 0 var(--radius) var(--radius);
+      padding:0 1rem;
+      transition:max-height .3s ease;
+    }
+    .faq-answer p{padding:.7rem 0}
+    /* ==== FOOTER ==== */
+    footer{
+      background:#fff;
+      margin-top:3rem;
+      padding:2rem 1rem;
+      text-align:center;
+      font-size:.9rem;
+      color:var(--muted);
+      box-shadow:0 -1px 2px rgba(0,0,0,.04);
+    }
+    footer a{color:var(--primary);margin:0 .5rem}
+    /* ==== RESPONSIVE ==== */
+    @media (max-width:768px){
+      .hamburger{display:flex}
+      nav ul{
+        display:none;
+        flex-direction:column;
+        background:#fff;
+        position:absolute;
+        top:var(--header-height);
+        left:0;width:100%;
+        box-shadow:0 4px 8px rgba(0,0,0,.08);
+      }
+      nav ul.show{display:flex}
+    }
+    /* ==== ANIMATIONS & MOTIONS ==== */
+    html{scroll-behavior:smooth;}
+    @keyframes fadeIn{to{opacity:1}}
+    .fade-in{animation:fadeIn .6s ease-out forwards;opacity:0}
+    @keyframes fadeUp{
+      from{opacity:0;transform:translateY(12px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+    .card{animation:fadeUp .6s ease forwards;opacity:0}
+    .card:nth-child(1){animation-delay:.05s}
+    .card:nth-child(2){animation-delay:.10s}
+    .card:nth-child(3){animation-delay:.15s}
+    .card:nth-child(4){animation-delay:.20s}
+    .card:nth-child(5){animation-delay:.25s}
+    .card:nth-child(6){animation-delay:.30s}
+    .card:nth-child(7){animation-delay:.35s}
+    .card:nth-child(8){animation-delay:.40s}
+    .card:nth-child(9){animation-delay:.45s}
+    .card:nth-child(10){animation-delay:.50s}
+    .pwd-toggle{
+      cursor:pointer;
+      margin-left:4px;
+      transition:transform .2s;
+      user-select:none;
+    }
+    .pwd-toggle:hover{transform:rotate(20deg);}
+    /* Hamburger‑to‑X animation */
+    .hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
+    .hamburger.active span:nth-child(2){opacity:0;}
+    .hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(6px,-6px);}
+  </style>
+</head>
+
+<body>
+  <!-- ==================== HEADER ==================== -->
+  <header>
+    <div class="logo"><a href="/">WatchTox</a></div>
+    <nav>
+      <ul id="nav-links">
+        <!-- Add other page links here if you have them -->
+        <li><a href="/pages/login.html"
+               style="color:var(--primary);font-weight:600;">Login / Register</a></li>
+      </ul>
+    </nav>
+    <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </header>
+
+  <!-- ==================== HERO ==================== -->
+  <section class="hero fade-in" data-aos="fade">
+    <h1>Earn Money While You Watch YouTube</h1>
+    <p>Watch videos, collect cash, buy lottery tickets and win amazing prizes.</p>
+    <a href="#earn" class="cta">Start Earning Now</a>
+  </section>
+
+  <!-- ==================== HOW IT WORKS ==================== -->
+  <section class="section" id="how-it-works" data-aos="fade-up">
+    <h2 class="section-title">How It Works</h2>
+    <div class="cards">
+      <div class="card"><img src="https://img.icons8.com/color/96/000000/monitor.png" alt="Viewer">
+        <h3>For Viewers</h3>
+        <p>Sign up, watch approved YouTube videos, and get paid instantly.</p>
+      </div>
+      <div class="card"><img src="https://img.icons8.com/color/96/000000/advertising.png" alt="Advertiser">
+        <h3>For Advertisers</h3>
+        <p>Upload your video, set a budget and pay only for real views.</p>
+      </div>
+      <div class="card"><img src="https://img.icons8.com/color/96/000000/ticket.png" alt="Lottery">
+        <h3>Lottery</h3>
+        <p>Earn tickets while watching, then enter daily draws for cash prizes.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== EARN MONEY ==================== -->
+  <section class="section" id="earn" data-aos="fade-up">
+    <h2 class="section-title">Earn Money</h2>
+    <div class="cards">
+      <div class="card"><img src="https://img.icons8.com/color/96/000000/play-button-circled--v1.png" alt="Earn per view">
+        <h3>Get Paid per View</h3>
+        <p>Each completed video gives you $0.01 – $0.10 (set by the advertiser).</p>
+      </div>
+      <div class="card"><img src="https://img.icons8.com/color/96/000000/coins.png" alt="Referral">
+        <h3>Referral Bonus</h3>
+        <p>Invite friends and receive a $0.10 bonus for each successful signup.</p>
+      </div>
+      <div class="card"><img src="https://img.icons8.com/color/96/000000/tasks.png" alt="Missions">
+        <h3>Daily Missions</h3>
+        <p>Complete 5‑video challenges to earn extra cash and tickets.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ADVERTISER HUB ==================== -->
+  <section class="section" id="advertiser" data-aos="fade-up">
+    <h2 class="section-title">Advertiser Hub</h2>
+    <div class="cards">
+      <div class="card"><img src="https://img.icons8.com/color/96/000000/video.png" alt="Upload video">
+        <h3>Upload Your Video</h3>
+        <p>Paste a YouTube URL you own – we’ll verify ownership automatically.</p>
+      </div>
+      <div class="card"><img src="https://img.icons8.com/color/96/000000/budget.png" alt="Budget">
+        <h3>Set Your Budget</h3>
+        <p>Pay only $0.01 – $0.10 for each authentic view you receive.</p>
+      </div>
+      <div class="card"><img src="https://img.icons8.com/color/96/000000/analytics.png" alt="Analytics">
+        <h3>Real‑Time Analytics</h3>
+        <p>See who watched, where they are and your ROI in a live dashboard.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== LOTTERY ==================== -->
+  <section class="section" id="lottery" data-aos="fade-up">
+    <h2 class="section-title">Lottery &amp; Prizes</h2>
+    <div class="cards">
+      <div class="card"><img src="https://img.icons8.com/color/96/000000/ticket.png" alt="Earn tickets">
+        <h3>Earn Tickets</h3>
+        <p>Every $0.10 earned = 1 lottery ticket automatically added.</p>
+      </div>
+      <div class="card"><img src="https://img.icons8.com/color/96/000000/gift.png" alt="Win prizes">
+        <h3>Win Cash &amp; Gifts</h3>
+        <p>Daily draws for $10, $50, $200 + gadgets, vouchers and more.</p>
+      </div>
+      <div class="card"><img src="https://img.icons8.com/color/96/000000/clock.png" alt="Instant draw">
+        <h3>Instant Draws</h3>
+        <p>Use 10 tickets to trigger an instant spin‑wheel for extra rewards.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== LEADERBOARD ==================== -->
+  <section class="section" id="leaderboard" data-aos="fade-up">
+    <h2 class="section-title">Top Earners</h2>
+    <div class="leaderboard">
+      <table>
+        <thead>
+          <tr><th>#</th><th>Username</th><th>Earnings (USD)</th><th>Tickets</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>JohnDoe</td><td>$1 245.30</td><td>128</td></tr>
+          <tr><td>2</td><td>JaneSmith</td><td>$1 102.50</td><td>115</td></tr>
+          <tr><td>3</td><td>MikeR</td><td>$998.00</td><td>97</td></tr>
+          <tr><td>4</td><td>EmilyK</td><td>$860.40</td><td>85</td></tr>
+          <tr><td>5</td><td>ChrisB</td><td>$720.20</td><td>71</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ==================== FAQ ==================== -->
+  <section class="section" id="faq" data-aos="fade-up">
+    <h2 class="section-title">Frequently Asked Questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <div class="faq-question">How do I get paid?</div>
+        <div class="faq-answer"><p>Earned money is stored in your WatchTox wallet. Once you reach the $10 minimum you can request a PayPal or bank transfer.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Can I watch any YouTube video?</div>
+        <div class="faq-answer"><p>Only videos that have been approved by advertisers and verified as owned by them are available in our queue.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Is there a limit on how many videos I can watch per day?</div>
+        <div class="faq-answer"><p>We recommend up to 100 videos per day to keep the system fair. Excessive activity may trigger a throttling check.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">How are lottery winners selected?</div>
+        <div class="faq-answer"><p>Winners are picked using a cryptographically secure random number generator (Node.js Crypto). All draws are logged for transparency.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer>
+    <p>&copy; 2026 WatchTox. All rights reserved.</p>
+    <p>
+      <a href="/terms">Terms of Service</a> |
+      <a href="/privacy">Privacy Policy</a> |
+      <a href="/contact">Contact Us</a>
+    </p>
+    <p>Follow us:
+      <a href="https://facebook.com/WatchTox" target="_blank">Facebook</a> |
+      <a href="https://twitter.com/WatchTox" target="_blank">Twitter</a> |
+      <a href="https://instagram.com/WatchTox" target="_blank">Instagram</a>
+    </p>
+  </footer>
+
+  <!-- ==== JavaScript ==== -->
+  <script>
+    // -------- Hamburger toggle (adds .active for X animation) ----------
+    const hamburger = document.getElementById('hamburger');
+    const navLinks  = document.getElementById('nav-links');
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('show');
+      hamburger.classList.toggle('active');
+    });
+
+    // -------- FAQ accordion (arrow rotation already in CSS) ----------
+    document.querySelectorAll('.faq-question').forEach(q => {
+      q.addEventListener('click', () => {
+        const active = q.classList.toggle('active');
+        const answer = q.nextElementSibling;
+        answer.style.maxHeight = active ? answer.scrollHeight + 'px' : '0';
+      });
+    });
+
+    // -------- AOS init (must run after AOS script loads) ----------
+    document.addEventListener('DOMContentLoaded', () => {
+      AOS.init({
+        once: true,                // animate only the first time a element appears
+        duration: 600,
+        easing: 'ease-out-quart'
+      });
+    });
+  </script>
+
+  <!-- AOS library (loaded after our own JS so we can init after DOMReady) -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+</body>
+</html>

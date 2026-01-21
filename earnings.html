@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- ==================== META ==================== -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Earnings – WatchTox</title>
+  <meta name="description"
+        content="Browse videos, offers and ads that pay you Rs. X for each completed view. Earn money while you watch.">
+  <meta name="theme-color" content="#1877F2">
+
+  <!-- ==================== OG (optional) ==================== -->
+  <meta property="og:title" content="Earnings – WatchTox">
+  <meta property="og:description"
+        content="Browse videos, offers and ads that pay you Rs. X for each completed view. Earn money while you watch.">
+  <meta property="og:image" content="https://your‑domain.com/assets/og-earn.jpg">
+  <meta property="og:url" content="https://your‑domain.com/earn.html">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- ==================== FONTS & ICONS ==================== -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+        rel="stylesheet">
+  <script src="https://kit.fontawesome.com/your-kit-id.js" crossorigin="anonymous"></script>
+
+  <!-- ==== AOS – Animate On Scroll (CDN) ==== -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+  <!-- ==================== STYLES (same design system) ==================== -->
+  <style>
+    :root{
+      --primary:#1877F2;          /* brand blue */
+      --primary-dark:#155db2;
+      --bg:#f0f2f5;
+      --card-bg:#fff;
+      --text:#050505;
+      --muted:#65676b;
+      --radius:.8rem;
+      --shadow:0 1px 3px rgba(0,0,0,.08);
+      --header-height:60px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);}
+    a{color:inherit;text-decoration:none}
+    button{cursor:pointer;border:none;background:none;font-family:inherit}
+    ul{list-style:none}
+    html{scroll-behavior:smooth;}                /* smooth internal links */
+
+    /* ------------------- HEADER ------------------- */
+    header{
+      height:var(--header-height);
+      background:#fff;
+      box-shadow:var(--shadow);
+      position:sticky;top:0;z-index:1000;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:0 1.5rem;
+    }
+    .logo{font-size:1.4rem;font-weight:700;color:var(--primary);}
+    nav ul{display:flex;gap:1.5rem}
+    nav a{
+      color:var(--muted);
+      font-weight:600;
+      position:relative;
+      transition:color .2s;
+    }
+    nav a:hover{color:var(--primary);}
+    nav a::after{
+      content:"";
+      position:absolute;
+      left:0;bottom:-3px;
+      width:0;height:2px;
+      background:var(--primary);
+      transition:width .3s;
+    }
+    nav a:hover::after{width:100%;}
+    .hamburger{display:none;flex-direction:column;gap:4px;cursor:pointer}
+    .hamburger span{
+      width:24px;height:2px;background:#333;
+      transition:transform .3s,opacity .3s;
+    }
+    /* Hamburger → X */
+    .hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
+    .hamburger.active span:nth-child(2){opacity:0;}
+    .hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(6px,-6px);}
+
+    /* ------------------- MAIN LAYOUT ------------------- */
+    .main{
+      max-width:1300px;
+      margin:2rem auto;
+      padding:0 1rem;
+      opacity:0;                     /* fade‑in on page load */
+      animation:fadeIn .6s ease-out forwards;
+    }
+    @keyframes fadeIn{to{opacity:1}}
+
+    .filter-bar{
+      display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;
+    }
+    .filter-bar input[type=text],
+    .filter-bar select{
+      flex:1 1 200px;
+      padding:.6rem 1rem;
+      border:1px solid #ddd;
+      border-radius:var(--radius);
+    }
+    .filter-bar button{
+      background:var(--primary);
+      color:#fff;
+      padding:.6rem 1rem;
+      border-radius:var(--radius);
+      font-weight:600;
+      transition:background .2s,transform .1s;
+    }
+    .filter-bar button:hover{
+      background:var(--primary-dark);
+      transform:scale(1.02);
+    }
+
+    /* ------------------- GRID OF ITEMS ------------------- */
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:1.5rem;
+    }
+    .card{
+      background:var(--card-bg);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      transition:transform .2s,box-shadow .2s;
+    }
+    .card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 4px 12px rgba(0,0,0,.12);
+    }
+    .card img{
+      width:100%;height:150px;object-fit:cover;
+    }
+    .card .content{
+      flex:1;
+      padding:1rem;
+      display:flex;
+      flex-direction:column;
+      gap:.5rem;
+    }
+    .card .content h4{
+      margin:0;
+      font-size:1.1rem;
+      color:var(--primary);
+    }
+    .card .content p{
+      margin:0;
+      font-size:.94rem;
+      color:var(--muted);
+      flex:1;
+    }
+    .card .footer{
+      background:#f9f9f9;
+      padding:.8rem 1rem;
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .badge{
+      background:var(--primary);
+      color:#fff;
+      border-radius:9999px;
+      padding:.2rem .6rem;
+      font-size:.85rem;
+    }
+    .btn-earn{
+      background:var(--primary);
+      color:#fff;
+      padding:.4rem .9rem;
+      border-radius:var(--radius);
+      font-weight:600;
+      transition:background .2s,transform .1s;
+    }
+    .btn-earn:hover{
+      background:var(--primary-dark);
+      transform:scale(1.05);
+    }
+
+    /* ------------------- FOOTER ------------------- */
+    footer{
+      background:#fff;
+      margin-top:3rem;
+      padding:2rem 1rem;
+      text-align:center;
+      font-size:.9rem;
+      color:var(--muted);
+      box-shadow:0 -1px 2px rgba(0,0,0,.04);
+    }
+    footer a{color:var(--primary);margin:0 .5rem}
+
+    /* ------------------- RESPONSIVE ------------------- */
+    @media (max-width:768px){
+      .hamburger{display:flex}
+      nav ul{
+        display:none;
+        flex-direction:column;
+        background:#fff;
+        position:absolute;top:var(--header-height);
+        left:0;width:100%;
+        box-shadow:0 4px 8px rgba(0,0,0,.08);
+      }
+      nav ul.show{display:flex}
+    }
+  </style>
+</head>
+
+<body>
+<!-- ==================== HEADER ==================== -->
+<header>
+  <div class="logo"><a href="../index.html">WatchTox</a></div>
+  <nav>
+    <ul id="nav-links">
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="earnings.html"
+             style="color:var(--primary);font-weight:600;">Earn</a></li>
+      <li><a href="advertisers.html">Advertiser</a></li>
+      <li><a href="lottery.html">Lottery</a></li>
+      <li><a href="index.html"
+             style="color:var(--primary);font-weight:600;">Home</a></li>
+    </ul>
+  </nav>
+  <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+</header>
+
+<!-- ==================== MAIN ==================== -->
+<main class="main">
+
+  <!-- ---------- FILTER BAR ---------- -->
+  <div class="filter-bar" data-aos="fade-down">
+    <input type="text" id="searchInput" placeholder="Search by title, advertiser…">
+    <select id="categorySelect">
+      <option value="all">All Types</option>
+      <option value="video">Videos</option>
+      <option value="offer">Offers</option>
+      <option value="ad">Ads</option>
+    </select>
+    <button id="applyFilters">Apply</button>
+  </div>
+
+  <!-- ---------- GRID OF EARNABLE ITEMS ---------- -->
+  <section class="grid" id="earningsGrid">
+    <!-- items injected by JavaScript; each gets data-aos="fade-up" -->
+  </section>
+
+</main>
+
+<!-- ==================== FOOTER ==================== -->
+<footer>
+  <p>&copy; 2026 WatchTox. All rights reserved.</p>
+  <p>
+    <a href="/terms">Terms of Service</a> |
+    <a href="/privacy">Privacy Policy</a> |
+    <a href="/contact">Contact Us</a>
+  </p>
+  <p>Follow us:
+    <a href="https://facebook.com/WatchTox" target="_blank">Facebook</a> |
+    <a href="https://twitter.com/WatchTox" target="_blank">Twitter</a> |
+    <a href="https://instagram.com/WatchTox" target="_blank">Instagram</a>
+  </p>
+</footer>
+
+<!-- ==================== SCRIPT (demo data + interactivity) ==================== -->
+<script>
+  /* ---- Mobile hamburger (adds .active for X animation) ---- */
+  const hamburger = document.getElementById('hamburger');
+  const navLinks  = document.getElementById('nav-links');
+  hamburger.addEventListener('click', () => {
+    navLinks.classList.toggle('show');
+    hamburger.classList.toggle('active');
+  });
+
+  /* ---- DEMO DATA --------------------------------------------------- */
+  const earningsData = [
+    // Videos ---------------------------------------------------------
+    { id:1, type:'video', title:'Golf Swing Tips', reward:2.5,
+      thumb:'https://i.ytimg.com/vi/9bZkp7q19f0/hqdefault.jpg',
+      description:'30‑second tutorial – watch till the end.' },
+    { id:2, type:'video', title:'Healthy Smoothie Recipe', reward:1.8,
+      thumb:'https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg',
+      description:'Quick recipe video, 45 s.' },
+    // Offers ---------------------------------------------------------
+    { id:3, type:'offer', title:'Survey: Gaming Habits', reward:5.0,
+      thumb:'https://images.unsplash.com/photo-1518630259850-1f740b718e6c?auto=format&fit=crop&w=400&q=80',
+      description:'Complete the 5‑minute questionnaire.' },
+    { id:4, type:'offer', title:'Install “ShopNow” App', reward:3.0,
+      thumb:'https://images.unsplash.com/photo-1511765224389-37f0e77cf0eb?auto=format&fit=crop&w=400&q=80',
+      description:'Download & open the app for 2 min.' },
+    // Ads ------------------------------------------------------------
+    { id:5, type:'ad', title:'Brand: UltraPhone 5G', reward:4.2,
+      thumb:'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=400&q=80',
+      description:'Watch the 60‑second ad to the end.' },
+    { id:6, type:'ad', title:'TravelCo – Summer Escapes', reward:3.5,
+      thumb:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80',
+      description:'20‑second travel promo.' }
+  ];
+
+  const grid = document.getElementById('earningsGrid');
+
+  /* ---- Render items (adds AOS attribute per card) ---- */
+  function renderItems(items){
+    grid.innerHTML = '';
+    if(items.length===0){
+      grid.innerHTML = '<p style="grid-column:1/-1;color:var(--muted);text-align:center;">No items match your filters.</p>';
+      return;
+    }
+    items.forEach(item=>{
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.setAttribute('data-aos','fade-up');      /* <‑‑ AOS animation */
+      card.innerHTML = `
+        <img src="${item.thumb}" alt="${item.title}">
+        <div class="content">
+          <h4>${item.title}</h4>
+          <p>${item.description}</p>
+        </div>
+        <div class="footer">
+          <span class="badge">Rs. ${item.reward.toFixed(2)}</span>
+          <button class="btn-earn" data-id="${item.id}">Earn</button>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  /* ---- Initial render (all items) ---- */
+  renderItems(earningsData);
+
+  /* ---- Filter handling ----------------------------------------------- */
+  document.getElementById('applyFilters').addEventListener('click', () => {
+    const query = document.getElementById('searchInput').value.trim().toLowerCase();
+    const cat   = document.getElementById('categorySelect').value;
+
+    const filtered = earningsData.filter(item => {
+      const matchesText = item.title.toLowerCase().includes(query) ||
+                          (item.description && item.description.toLowerCase().includes(query));
+      const matchesCat  = cat==='all' || item.type===cat;
+      return matchesText && matchesCat;
+    });
+    renderItems(filtered);
+    // Re‑initialise AOS after DOM change so new elements animate
+    AOS.refresh();
+  });
+
+  /* ---- Earn button click (demo only) --------------------------------- */
+  grid.addEventListener('click', e => {
+    if(e.target.classList.contains('btn-earn')){
+      const id   = e.target.getAttribute('data-id');
+      const item = earningsData.find(i=>i.id==id);
+      alert(`✅ You selected “${item.title}”.\n\nIn a real app you would now:\n1️⃣ Open the video/offer/ad.\n2️⃣ Track the watch/complete event.\n3️⃣ Credit Rs. ${item.reward.toFixed(2)} to the user’s wallet.`);
+    }
+  });
+
+  /* ---- AOS init ------------------------------------------------------ */
+  document.addEventListener('DOMContentLoaded', () => {
+    AOS.init({
+      once: true,            // animate only the first time a element scrolls into view
+      duration: 600,
+      easing: 'ease-out-quart'
+    });
+  });
+</script>
+
+<!-- AOS library (placed after your own script so init runs after DOMReady) -->
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+</body>
+</html>

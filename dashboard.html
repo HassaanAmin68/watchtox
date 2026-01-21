@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- ==== META ==== -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard – WatchTox</title>
+  <meta name="description"
+        content="Your WatchTox dashboard – see earnings, watch queue, referral code, lottery tickets and recent activity.">
+  <meta name="theme-color" content="#1877F2">
+
+  <!-- ==== OPEN GRAPH (optional) ==== -->
+  <meta property="og:title" content="Dashboard – WatchTox">
+  <meta property="og:description"
+        content="Track your earnings, watch videos, earn tickets and invite friends on WatchTox.">
+  <meta property="og:image" content="https://your-domain.com/assets/og-dashboard.jpg">
+  <meta property="og:url" content="https://your-domain.com/dashboard.html">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- ==== FONT ==== -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
+  <!-- ==== AOS – Animate On Scroll (CDN) ==== -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+  <!-- ==== STYLES (identical to index / login / register) ==== -->
+  <style>
+    :root{
+      --primary:#1877F2;          /* brand blue */
+      --primary-dark:#155db2;
+      --bg:#f0f2f5;
+      --card-bg:#fff;
+      --text:#050505;
+      --muted:#65676b;
+      --radius:.8rem;
+      --shadow:0 1px 2px rgba(0,0,0,.08);
+      --header-height:60px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);}
+    a{color:inherit;text-decoration:none}
+    button{cursor:pointer;border:none;background:none;font-family:inherit}
+    ul{list-style:none}
+    html{scroll-behavior:smooth;}               /* smooth internal links */
+
+    /* ---------- HEADER ---------- */
+    header{
+      height:var(--header-height);
+      background:#fff;
+      box-shadow:var(--shadow);
+      position:sticky;top:0;z-index:1000;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:0 1.5rem;
+    }
+    .logo{font-size:1.4rem;font-weight:700;color:var(--primary);}
+    nav ul{display:flex;gap:1.5rem}
+    nav a{
+      color:var(--muted);
+      font-weight:600;
+      position:relative;
+      transition:color .2s;
+    }
+    nav a:hover{color:var(--primary);}
+    nav a::after{
+      content:"";
+      position:absolute;
+      left:0;bottom:-3px;
+      width:0;height:2px;
+      background:var(--primary);
+      transition:width .3s;
+    }
+    nav a:hover::after{width:100%;}
+    .hamburger{
+      display:none;
+      flex-direction:column;
+      gap:4px;
+      cursor:pointer;
+    }
+    .hamburger span{
+      width:24px;height:2px;background:#333;
+      transition:transform .3s,opacity .3s;
+    }
+    .hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
+    .hamburger.active span:nth-child(2){opacity:0;}
+    .hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(6px,-6px);}
+
+    /* ---------- MAIN LAYOUT ---------- */
+    .main{
+      max-width:1200px;
+      margin:2rem auto;
+      padding:0 1rem;
+      opacity:0;                     /* fade‑in on page load */
+      animation:fadeIn .6s ease-out forwards;
+    }
+    @keyframes fadeIn{to{opacity:1}}
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+      gap:1.5rem;
+    }
+    .card{
+      background:var(--card-bg);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:1.8rem;
+      transition:transform .2s,box-shadow .2s;
+    }
+    .card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 8px 12px rgba(0,0,0,.15);
+    }
+    .card h3{
+      margin-bottom:.8rem;
+      font-size:1.3rem;
+      color:var(--primary);
+    }
+    .balance-amount{
+      font-size:2rem;
+      font-weight:700;
+      color:var(--primary);
+    }
+    .btn{
+      display:inline-block;
+      background:var(--primary);
+      color:#fff;
+      padding:.6rem 1rem;
+      border-radius:var(--radius);
+      font-weight:600;
+      transition:background .2s,transform .1s;
+      text-align:center;
+    }
+    .btn:hover{
+      background:var(--primary-dark);
+      transform:scale(1.02);
+    }
+    .btn-outline{
+      background:none;
+      border:2px solid var(--primary);
+      color:var(--primary);
+    }
+    .btn-outline:hover{
+      background:var(--primary);
+      color:#fff;
+    }
+
+    /* ---------- WATCH QUEUE ---------- */
+    .watch-list{list-style:none;margin:0;padding:0}
+    .watch-item{
+      display:flex;align-items:center;gap:.8rem;
+      padding:.8rem 0;
+      border-bottom:1px solid #eee;
+    }
+    .watch-item img{
+      width:80px;height:45px;object-fit:cover;border-radius:4px;
+    }
+    .watch-item button{
+      margin-left:auto;
+      background:var(--primary);
+      color:#fff;
+      padding:.4rem .9rem;
+      border-radius:var(--radius);
+      font-size:.9rem;
+      transition:background .2s,transform .1s;
+    }
+    .watch-item button:hover{
+      background:var(--primary-dark);
+      transform:scale(1.02);
+    }
+
+    /* ---------- TABLE ---------- */
+    table{width:100%;border-collapse:collapse}
+    th, td{padding:.8rem .5rem;text-align:left}
+    th{background:var(--primary);color:#fff}
+    tr:nth-child(even){background:#fafafa}
+
+    /* ---------- FOOTER ---------- */
+    footer{
+      background:#fff;
+      margin-top:3rem;
+      padding:2rem 1rem;
+      text-align:center;
+      font-size:.9rem;
+      color:var(--muted);
+      box-shadow:0 -1px 2px rgba(0,0,0,.04);
+    }
+    footer a{color:var(--primary);margin:0 .5rem}
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width:768px){
+      .hamburger{display:flex}
+      nav ul{
+        display:none;
+        flex-direction:column;
+        background:#fff;
+        position:absolute;top:var(--header-height);
+        left:0;width:100%;
+        box-shadow:0 4px 8px rgba(0,0,0,.08);
+      }
+      nav ul.show{display:flex}
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ==================== HEADER ==================== -->
+  <header>
+    <div class="logo"><a href="index.html">WatchTox</a></div>
+    <nav>
+      <ul id="nav-links">
+        <li><a href="earnings.html">Earner</a></li>
+        <li><a href="lottery.html">Lottery</a></li>
+        <li><a href="advertisers.html">Advertiser</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="dashboard.html" style="color:var(--primary);font-weight:600;">Dashboard</a></li>
+        <li><a href="index.html" style="color:var(--primary);font-weight:600;">Home</a></li>
+      </ul>
+    </nav>
+    <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </header>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="main">
+
+    <!-- ---- TOP ROW: Balance + Today Stats ---- -->
+    <section class="grid-2" data-aos="fade-up">
+      <!-- Wallet Balance -->
+      <div class="card">
+        <h3>Wallet Balance</h3>
+        <p class="balance-amount">$<span id="balance">0.00</span></p>
+        <p style="color:var(--muted);margin:.4rem 0;">Pending: $<span id="pending">0.00</span></p>
+        <button class="btn" id="withdrawBtn">Withdraw</button>
+        <button class="btn btn-outline" id="depositBtn" style="margin-left:.5rem;">Deposit</button>
+      </div>
+
+      <!-- Today's Earnings -->
+      <div class="card">
+        <h3>Today's Earnings</h3>
+        <p class="balance-amount">$<span id="todayEarnings">0.00</span></p>
+        <p style="color:var(--muted);margin:.4rem 0;">Videos watched: <span id="todayViews">0</span></p>
+        <button class="btn" id="viewMoreToday">View details</button>
+      </div>
+    </section>
+
+    <hr style="margin:2rem 0;border:none;border-top:1px solid #ddd;">
+
+    <!-- ---- MIDDLE ROW: Watch Queue & Referral ---- -->
+    <section class="grid-2" data-aos="fade-up">
+      <!-- Watch Queue -->
+      <div class="card">
+        <h3>Watch Queue (Next 5 videos)</h3>
+        <ul class="watch-list" id="watchQueue">
+          <!-- Placeholder items – replace with real data via JS / back‑end -->
+          <li class="watch-item">
+            <img src="https://i.ytimg.com/vi/9bZkp7q19f0/hqdefault.jpg" alt="thumb">
+            <span>Gangnam Style – PSY</span>
+            <button>Watch</button>
+          </li>
+          <li class="watch-item">
+            <img src="https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg" alt="thumb">
+            <span>Never Gonna Give You Up</span>
+            <button>Watch</button>
+          </li>
+          <li class="watch-item">
+            <img src="https://i.ytimg.com/vi/3JZ_D3ELwOQ/hqdefault.jpg" alt="thumb">
+            <span>Charlie Puth – Attention</span>
+            <button>Watch</button>
+          </li>
+          <li class="watch-item">
+            <img src="https://i.ytimg.com/vi/LsoLEjrDogU/hqdefault.jpg" alt="thumb">
+            <span>Adele – Hello</span>
+            <button>Watch</button>
+          </li>
+          <li class="watch-item">
+            <img src="https://i.ytimg.com/vi/fJ9rUzIMcZQ/hqdefault.jpg" alt="thumb">
+            <span>Queen – Bohemian Rhapsody</span>
+            <button>Watch</button>
+          </li>
+        </ul>
+        <button class="btn" style="margin-top:.8rem;" id="refreshQueue">Refresh Queue</button>
+      </div>
+
+      <!-- Referral & Bonus -->
+      <div class="card">
+        <h3>Referral Program</h3>
+        <p>Your personal code:</p>
+        <div style="display:flex;align-items:center;margin:.8rem 0;">
+          <input type="text" id="refCode" value="ABCD1234"
+                 readonly style="flex:1;padding:.5rem;border:1px solid #ddd;border-radius:var(--radius);font-weight:600;">
+          <button class="btn btn-outline" id="copyRef" style="margin-left:.4rem;">Copy</button>
+        </div>
+        <p style="color:var(--muted);margin:.5rem 0;">Earn $0.10 for each friend that signs up and watches their first video.</p>
+        <p>Bonus earned so far: <strong>$<span id="refBonus">0.00</span></strong></p>
+        <button class="btn" id="shareReferral">Share on Social</button>
+      </div>
+    </section>
+
+    <hr style="margin:2rem 0;border:none;border-top:1px solid #ddd;">
+
+    <!-- ---- BOTTOM ROW: Lottery + Recent Activity ---- -->
+    <section class="grid-2" data-aos="fade-up">
+      <!-- Lottery Tickets -->
+      <div class="card">
+        <h3>Lottery Tickets</h3>
+        <p>You have <strong><span id="ticketCount">0</span></strong> tickets.</p>
+        <button class="btn" id="buyTickets">Buy More Tickets</button>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="card">
+        <h3>Recent Video Activity</h3>
+        <table>
+          <thead>
+            <tr><th>Video</th><th>Earned</th><th>Date</th></tr>
+          </thead>
+          <tbody id="recentActivity">
+            <!-- Placeholder rows – will be filled by demo script -->
+          </tbody>
+        </table>
+        <button class="btn" style="margin-top:.8rem;" id="viewAllActivity">View All</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer>
+    <p>&copy; 2026 WatchTox. All rights reserved.</p>
+    <p>
+      <a href="/terms">Terms of Service</a> |
+      <a href="/privacy">Privacy Policy</a> |
+      <a href="/contact">Contact Us</a>
+    </p>
+    <p>Follow us:
+      <a href="https://facebook.com/WatchTox" target="_blank">Facebook</a> |
+      <a href="https://twitter.com/WatchTox" target="_blank">Twitter</a> |
+      <a href="https://instagram.com/WatchTox" target="_blank">Instagram</a>
+    </p>
+  </footer>
+
+  <!-- ==== JAVASCRIPT (hamburger + demo helpers) ==== -->
+  <script>
+    // ---------- Hamburger (adds .active for X animation) ----------
+    const hamburger = document.getElementById('hamburger');
+    const navLinks  = document.getElementById('nav-links');
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('show');
+      hamburger.classList.toggle('active');
+    });
+
+    // ---------- Demo helpers (replace with real API calls) ----------
+    const demoData = {
+      balance: 124.37,
+      pending: 15.00,
+      todayEarnings: 4.52,
+      todayViews: 45,
+      tickets: 28,
+      refBonus: 1.20,
+      refCode: 'ABCD1234',
+      recentActivity: [
+        {title:'Gangnam Style – PSY', earned:0.05, date:'2026-01-09'},
+        {title:'Never Gonna Give You Up', earned:0.07, date:'2026-01-09'},
+        {title:'Charlie Puth – Attention', earned:0.04, date:'2026-01-08'},
+        {title:'Adele – Hello', earned:0.06, date:'2026-01-08'},
+        {title:'Queen – Bohemian Rhapsody', earned:0.05, date:'2026-01-07'}
+      ]
+    };
+
+    // Populate static fields
+    document.getElementById('balance').textContent = demoData.balance.toFixed(2);
+    document.getElementById('pending').textContent = demoData.pending.toFixed(2);
+    document.getElementById('todayEarnings').textContent = demoData.todayEarnings.toFixed(2);
+    document.getElementById('todayViews').textContent = demoData.todayViews;
+    document.getElementById('ticketCount').textContent = demoData.tickets;
+    document.getElementById('refBonus').textContent = demoData.refBonus.toFixed(2);
+    document.getElementById('refCode').value = demoData.refCode;
+
+    // Recent activity rows
+    const tbody = document.getElementById('recentActivity');
+    demoData.recentActivity.forEach(item => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${item.title}</td><td>$${item.earned.toFixed(2)}</td><td>${item.date}</td>`;
+      tbody.appendChild(tr);
+    });
+
+    // Copy referral code
+    document.getElementById('copyRef').addEventListener('click', () => {
+      const el = document.getElementById('refCode');
+      el.select();
+      document.execCommand('copy');
+      alert('Referral code copied to clipboard!');
+    });
+
+    // Simple placeholder actions
+    document.getElementById('withdrawBtn').addEventListener('click', () => alert('Withdraw flow – integrate your API.'));
+    document.getElementById('depositBtn').addEventListener('click', () => alert('Deposit flow – integrate your API.'));
+    document.getElementById('refreshQueue').addEventListener('click', () => alert('Refresh queue – fetch new videos from back‑end.'));
+    document.getElementById('buyTickets').addEventListener('click', () => alert('Buy tickets – open purchase modal or redirect.'));
+    document.getElementById('shareReferral').addEventListener('click', () => {
+      const url = `https://watchtox.com/signup?ref=${demoData.refCode}`;
+      if (navigator.share) {
+        navigator.share({title:'Join WatchTox',url});
+      } else {
+        prompt('Copy this link', url);
+      }
+    });
+  </script>
+
+  <!-- ==== AOS init (after your own script) ==== -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      AOS.init({
+        once: true,           // animate only once per element
+        duration: 600,
+        easing: 'ease-out-quart'
+      });
+    });
+  </script>
+</body>
+</html>

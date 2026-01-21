@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- ==================== META ==================== -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile – WatchTox</title>
+  <meta name="description"
+        content="Your WatchTox profile – see wallet balance, tickets, referral code and recent activity.">
+  <meta name="theme-color" content="#1877F2">
+
+  <!-- ==================== OG (optional) ==================== -->
+  <meta property="og:title" content="Profile – WatchTox">
+  <meta property="og:description"
+        content="Your WatchTox profile – see wallet balance, tickets, referral code and recent activity.">
+  <meta property="og:image" content="https://your‑domain.com/assets/og-profile.jpg">
+  <meta property="og:url" content="https://your‑domain.com/profile.html">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- ==================== FONTS ==================== -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
+  <!-- ==== AOS – Animate On Scroll (CDN) ==== -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+  <!-- ==================== STYLES (same design system) ==================== -->
+  <style>
+    :root{
+      --primary:#1877F2;          /* brand blue */
+      --primary-dark:#155db2;
+      --bg:#f0f2f5;
+      --card-bg:#fff;
+      --text:#050505;
+      --muted:#65676b;
+      --radius:.8rem;
+      --shadow:0 1px 3px rgba(0,0,0,.08);
+      --header-height:60px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);}
+    a{color:inherit;text-decoration:none}
+    button{cursor:pointer;border:none;background:none;font-family:inherit}
+    ul{list-style:none}
+    html{scroll-behavior:smooth;}               /* smooth internal links */
+
+    /* ------------------- HEADER ------------------- */
+    header{
+      height:var(--header-height);
+      background:#fff;
+      box-shadow:var(--shadow);
+      position:sticky;top:0;z-index:1000;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:0 1.5rem;
+    }
+    .logo{font-size:1.4rem;font-weight:700;color:var(--primary);}
+    nav ul{display:flex;gap:1.5rem}
+    nav a{
+      color:var(--muted);
+      font-weight:600;
+      position:relative;
+      transition:color .2s;
+    }
+    nav a:hover{color:var(--primary);}
+    nav a::after{
+      content:"";
+      position:absolute;
+      left:0;bottom:-3px;
+      width:0;height:2px;
+      background:var(--primary);
+      transition:width .3s;
+    }
+    nav a:hover::after{width:100%;}
+    .hamburger{
+      display:none;
+      flex-direction:column;
+      gap:4px;
+      cursor:pointer;
+    }
+    .hamburger span{
+      width:24px;height:2px;background:#333;
+      transition:transform .3s,opacity .3s;
+    }
+    .hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
+    .hamburger.active span:nth-child(2){opacity:0;}
+    .hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(6px,-6px);}
+
+    /* ------------------- MAIN LAYOUT ------------------- */
+    .main{
+      max-width:1200px;
+      margin:2rem auto;
+      padding:0 1rem;
+      opacity:0;                     /* fade‑in on page load */
+      animation:fadeIn .6s ease-out forwards;
+    }
+    @keyframes fadeIn{to{opacity:1}}
+
+    /* ------------------- PROFILE HEADER ------------------- */
+    .profile-header{
+      display:flex;
+      align-items:center;
+      gap:2rem;
+      margin-bottom:2rem;
+      background:var(--card-bg);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:2rem;
+      transition:transform .2s,box-shadow .2s;
+    }
+    .profile-header:hover{
+      transform:translateY(-4px);
+      box-shadow:0 8px 12px rgba(0,0,0,.15);
+    }
+    .avatar{
+      width:120px;height:120px;
+      border-radius:50%;
+      background:#ddd;
+      background-size:cover;
+      background-position:center;
+    }
+    .profile-details h2{
+      margin:0;
+      font-size:1.8rem;
+      color:var(--primary);
+    }
+    .profile-details p{
+      margin:.3rem 0;
+      color:var(--muted);
+    }
+    .profile-details .btn{
+      margin-top:.5rem;
+      background:var(--primary);
+      color:#fff;
+      padding:.5rem 1rem;
+      border-radius:var(--radius);
+      font-weight:600;
+      transition:background .2s,transform .1s;
+    }
+    .profile-details .btn:hover{
+      background:var(--primary-dark);
+      transform:scale(1.02);
+    }
+
+    /* ------------------- STAT GRID ------------------- */
+    .stats-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:1.5rem;
+      margin-bottom:2rem;
+    }
+    .stat-card{
+      background:var(--card-bg);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:1.5rem;
+      text-align:center;
+      transition:transform .2s,box-shadow .2s;
+    }
+    .stat-card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 8px 12px rgba(0,0,0,.15);
+    }
+    .stat-card h4{
+      margin:0 0 .4rem;
+      font-size:1.2rem;
+      color:var(--primary);
+    }
+    .stat-card .value{
+      font-size:1.6rem;
+      font-weight:700;
+      color:var(--primary);
+    }
+    .stat-card .btn-outline{
+      margin-top:.8rem;
+      background:none;
+      border:2px solid var(--primary);
+      color:var(--primary);
+      padding:.4rem .9rem;
+      border-radius:var(--radius);
+      font-weight:600;
+      transition:background .2s,color .2s,transform .1s;
+    }
+    .stat-card .btn-outline:hover{
+      background:var(--primary);
+      color:#fff;
+      transform:scale(1.02);
+    }
+
+    /* ------------------- REFERRAL SECTION ------------------- */
+    .referral{
+      background:var(--card-bg);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:1.5rem;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      text-align:center;
+      transition:transform .2s,box-shadow .2s;
+    }
+    .referral:hover{
+      transform:translateY(-4px);
+      box-shadow:0 8px 12px rgba(0,0,0,.15);
+    }
+    .referral input{
+      width:200px;
+      padding:.5rem;
+      border:1px solid #ddd;
+      border-radius:var(--radius);
+      text-align:center;
+      font-weight:600;
+      margin-bottom:.5rem;
+    }
+    .referral .btn{
+      background:var(--primary);
+      color:#fff;
+      padding:.5rem 1rem;
+      border-radius:var(--radius);
+      font-weight:600;
+      transition:background .2s,transform .1s;
+    }
+    .referral .btn:hover{
+      background:var(--primary-dark);
+      transform:scale(1.02);
+    }
+
+    /* ------------------- RECENT ACTIVITY TABLE ------------------- */
+    .activity-table{
+      background:var(--card-bg);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .activity-table table{
+      width:100%;
+      border-collapse:collapse;
+    }
+    .activity-table th,
+    .activity-table td{
+      padding:.8rem .5rem;
+      text-align:left;
+    }
+    .activity-table th{
+      background:var(--primary);
+      color:#fff;
+    }
+    .activity-table tr:nth-child(even){background:#fafafa;}
+
+    /* ------------------- FOOTER ------------------- */
+    footer{
+      background:#fff;
+      margin-top:3rem;
+      padding:2rem 1rem;
+      text-align:center;
+      font-size:.9rem;
+      color:var(--muted);
+      box-shadow:0 -1px 2px rgba(0,0,0,.04);
+    }
+    footer a{color:var(--primary);margin:0 .5rem}
+
+    /* ------------------- RESPONSIVE ------------------- */
+    @media (max-width:768px){
+      .hamburger{display:flex}
+      nav ul{
+        display:none;
+        flex-direction:column;
+        background:#fff;
+        position:absolute;top:var(--header-height);
+        left:0;width:100%;
+        box-shadow:0 4px 8px rgba(0,0,0,.08);
+      }
+      nav ul.show{display:flex}
+      .profile-header{flex-direction:column;align-items:center;text-align:center}
+      .avatar{width:100px;height:100px}
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ==================== HEADER ==================== -->
+  <header>
+    <div class="logo"><a href="index.html">WatchTox</a></div>
+    <nav>
+      <ul id="nav-links">
+        <li><a href="earnings.html">Earn</a></li>
+        <li><a href="advertisers.html">Advertiser</a></li>
+        <li><a href="lottery.html">Lottery</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="profile.html" style="color:var(--primary);font-weight:600;">Profile</a></li>
+        <li><a href="index.html" style="color:var(--primary);font-weight:600;">Home</a></li>
+      </ul>
+    </nav>
+    <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </header>
+
+  <!-- ==================== MAIN ==================== -->
+  <main class="main">
+
+    <!-- ---------- PROFILE HEADER (avatar + basic info) ---------- -->
+    <section class="profile-header" data-aos="fade-down">
+      <div class="avatar" id="avatar" style="background-image:url('https://i.pravatar.cc/150');"></div>
+      <div class="profile-details">
+        <h2 id="userName">John Doe</h2>
+        <p id="userEmail">john@example.com</p>
+        <button class="btn" id="editProfileBtn">Edit Profile</button>
+      </div>
+    </section>
+
+    <!-- ---------- STAT GRID (balance, tickets, referral) ---------- -->
+    <section class="stats-grid">
+
+      <div class="stat-card" data-aos="fade-up">
+        <h4>Wallet Balance</h4>
+        <div class="value">$<span id="balance">0.00</span></div>
+        <button class="btn-outline" id="withdrawBtn">Withdraw</button>
+      </div>
+
+      <div class="stat-card" data-aos="fade-up" data-aos-delay="100">
+        <h4>Lottery Tickets</h4>
+        <div class="value"><span id="ticketCount">0</span></div>
+        <button class="btn-outline" id="buyTicketBtn">Buy More</button>
+      </div>
+
+      <div class="stat-card" data-aos="fade-up" data-aos-delay="200">
+        <h4>Referral Bonus</h4>
+        <div class="value">$<span id="refBonus">0.00</span></div>
+        <button class="btn-outline" id="shareReferralBtn">Share</button>
+      </div>
+
+    </section>
+
+    <!-- ---------- REFERRAL CODE CARD ---------- -->
+    <section class="referral" data-aos="fade-up" data-aos-delay="300">
+      <h4>Your Referral Code</h4>
+      <input type="text" id="refCode" readonly>
+      <button class="btn" id="copyRefBtn">Copy</button>
+    </section>
+
+    <!-- ---------- RECENT ACTIVITY TABLE ---------- -->
+    <section class="activity-table" data-aos="fade-up" data-aos-delay="400">
+      <h3 style="margin:0;padding:1rem;background:var(--primary);color:#fff;">Recent Video Activity</h3>
+      <table>
+        <thead>
+          <tr><th>Video</th><th>Earned</th><th>Date</th></tr>
+        </thead>
+        <tbody id="activityBody">
+          <!-- Demo rows – will be replaced by JS -->
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer>
+    <p>&copy; 2026 WatchTox. All rights reserved.</p>
+    <p>
+      <a href="/terms">Terms of Service</a> |
+      <a href="/privacy">Privacy Policy</a> |
+      <a href="/contact">Contact Us</a>
+    </p>
+    <p>Follow us:
+      <a href="https://facebook.com/WatchTox" target="_blank">Facebook</a> |
+      <a href="https://twitter.com/WatchTox" target="_blank">Twitter</a> |
+      <a href="https://instagram.com/WatchTox" target="_blank">Instagram</a>
+    </p>
+  </footer>
+
+  <!-- ==================== SCRIPTS ==================== -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+  <script>
+    /* ---------- Hamburger (adds .active for X) ---------- */
+    const hamburger = document.getElementById('hamburger');
+    const navLinks  = document.getElementById('nav-links');
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('show');
+      hamburger.classList.toggle('active');
+    });
+
+    /* ---------- AOS init ---------- */
+    document.addEventListener('DOMContentLoaded', () => {
+      AOS.init({
+        once: true,
+        duration: 600,
+        easing: 'ease-out-quart'
+      });
+    });
+
+    /* ---------- Demo data (replace with real API calls) ---------- */
+    const demoUser = {
+      name: 'John Doe',
+      email: 'john@example.com',
+      avatar: 'https://i.pravatar.cc/150?img=5',
+      balance: 124.37,
+      pending: 15.00,
+      tickets: 28,
+      referralCode: 'ABCD1234',
+      referralBonus: 1.20,
+      recentActivity: [
+        {title:'Golf Swing Tips', earned:0.05, date:'2026‑01‑09'},
+        {title:'Healthy Smoothie Recipe', earned:0.07, date:'2026‑01‑09'},
+        {title:'Charlie Puth – Attention', earned:0.04, date:'2026‑01‑08'}
+      ]
+    };
+
+    // In a real app you would do something like:
+    // const token = localStorage.getItem('watchtox_jwt');
+    // fetch('/api/auth/me', {headers:{'Authorization':`Bearer ${token}`}})
+    //   .then(r=>r.json())
+    //   .then(user=>populate(user));
+
+    function populate(user){
+      document.getElementById('userName').textContent = user.name;
+      document.getElementById('userEmail').textContent = user.email;
+      document.getElementById('avatar').style.backgroundImage = `url('${user.avatar}')`;
+      document.getElementById('balance').textContent = user.balance.toFixed(2);
+      document.getElementById('ticketCount').textContent = user.tickets;
+      document.getElementById('refBonus').textContent = user.referralBonus.toFixed(2);
+      document.getElementById('refCode').value = user.referralCode;
+
+      const tbody = document.getElementById('activityBody');
+      tbody.innerHTML = '';
+      user.recentActivity.forEach(item=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${item.title}</td><td>$${item.earned.toFixed(2)}</td><td>${item.date}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Populate with demo data for now
+    populate(demoUser);
+
+    /* ---------- Interaction helpers ---------- */
+    document.getElementById('copyRefBtn').addEventListener('click', () => {
+      const refInput = document.getElementById('refCode');
+      refInput.select();
+      document.execCommand('copy');
+      alert('Referral code copied to clipboard!');
+    });
+
+    document.getElementById('editProfileBtn').addEventListener('click', () => {
+      alert('Edit profile – integrate with your profile‑edit flow.');
+    });
+    document.getElementById('withdrawBtn').addEventListener('click', () => {
+      alert('Withdraw – integrate with your payment flow.');
+    });
+    document.getElementById('buyTicketBtn').addEventListener('click', () => {
+      alert('Buy tickets – open purchase modal or redirect.');
+    });
+    document.getElementById('shareReferralBtn').addEventListener('click', () => {
+      const url = `https://watchtox.com/signup?ref=${demoUser.referralCode}`;
+      if (navigator.share) {
+        navigator.share({title:'Join WatchTox',url});
+      } else {
+        prompt('Copy this referral link', url);
+      }
+    });
+  </script>
+</body>
+</html>

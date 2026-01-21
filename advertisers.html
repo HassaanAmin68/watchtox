@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- ==================== META ==================== -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advertiser Hub – WatchTox</title>
+  <meta name="description"
+        content="Create YouTube ad campaigns, set budgets, target audiences and track performance on WatchTox.">
+  <meta name="theme-color" content="#1877F2">
+
+  <!-- ==================== OG (optional) ==================== -->
+  <meta property="og:title" content="Advertiser Hub – WatchTox">
+  <meta property="og:description"
+        content="Create YouTube ad campaigns, set budgets, target audiences and track performance on WatchTox.">
+  <meta property="og:image" content="https://your‑domain.com/assets/og-advertiser.jpg">
+  <meta property="og:url" content="https://your‑domain.com/advertiser.html">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- ==================== FONTS & ICONS ==================== -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+        rel="stylesheet">
+  <script src="https://kit.fontawesome.com/your-kit-id.js" crossorigin="anonymous"></script>
+
+  <!-- ==== AOS – Animate On Scroll (CDN) ==== -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+  <!-- ==================== STYLES (same design system) ==================== -->
+  <style>
+    :root{
+      --primary:#1877F2;          /* brand blue */
+      --primary-dark:#155db2;
+      --bg:#f0f2f5;
+      --card-bg:#fff;
+      --text:#050505;
+      --muted:#65676b;
+      --radius:.8rem;
+      --shadow:0 1px 3px rgba(0,0,0,.08);
+      --header-height:60px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);}
+    a{color:inherit;text-decoration:none}
+    button{cursor:pointer;border:none;background:none;font-family:inherit}
+    ul{list-style:none}
+    html{scroll-behavior:smooth;}
+
+    /* ------------------- HEADER ------------------- */
+    header{
+      height:var(--header-height);
+      background:#fff;
+      box-shadow:var(--shadow);
+      position:sticky;top:0;z-index:1000;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:0 1.5rem;
+    }
+    .logo{font-size:1.4rem;font-weight:700;color:var(--primary);}
+    nav ul{display:flex;gap:1.5rem}
+    nav a{
+      color:var(--muted);
+      font-weight:600;
+      position:relative;
+      transition:color .2s;
+    }
+    nav a:hover{color:var(--primary);}
+    nav a::after{
+      content:"";
+      position:absolute;
+      left:0;bottom:-3px;
+      width:0;height:2px;
+      background:var(--primary);
+      transition:width .3s;
+    }
+    nav a:hover::after{width:100%;}
+    .hamburger{display:none;flex-direction:column;gap:4px;cursor:pointer}
+    .hamburger span{
+      width:24px;height:2px;background:#333;
+      transition:transform .3s,opacity .3s;
+    }
+    .hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
+    .hamburger.active span:nth-child(2){opacity:0;}
+    .hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(6px,-6px);}
+
+    /* ------------------- MAIN LAYOUT ------------------- */
+    .main{
+      max-width:1300px;
+      margin:2rem auto;
+      padding:0 1rem;
+      display:grid;
+      grid-template-columns:1fr minmax(300px,350px);
+      gap:1.5rem;
+      opacity:0;                     /* fade‑in on load */
+      animation:fadeIn .6s ease-out forwards;
+    }
+    @media (max-width:960px){ .main{grid-template-columns:1fr;} }
+    @keyframes fadeIn{to{opacity:1}}
+
+    /* ------------------- CARD ------------------- */
+    .card{
+      background:var(--card-bg);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:1.8rem;
+      transition:transform .2s,box-shadow .2s;
+    }
+    .card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 8px 12px rgba(0,0,0,.15);
+    }
+    .card h3{
+      margin-bottom:.8rem;
+      font-size:1.3rem;
+      color:var(--primary);
+    }
+
+    /* ------------------- FORM STYLES ------------------- */
+    .form-group{margin-bottom:1rem}
+    .form-group label{
+      display:block;margin-bottom:.4rem;font-weight:600;color:var(--muted);
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea{
+      width:100%;padding:.7rem 1rem;border:1px solid #ddd;border-radius:var(--radius);
+      font-size:1rem;transition:border .2s;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus{
+      outline:none;border-color:var(--primary);
+    }
+    .btn-primary{
+      background:var(--primary);
+      color:#fff;
+      padding:.8rem 1.5rem;
+      border-radius:var(--radius);
+      font-weight:600;
+      transition:background .2s,transform .1s;
+    }
+    .btn-primary:hover{
+      background:var(--primary-dark);
+      transform:scale(1.02);
+    }
+    .btn-outline{
+      background:none;
+      border:2px solid var(--primary);
+      color:var(--primary);
+      padding:.6rem 1.2rem;
+      border-radius:var(--radius);
+      font-weight:600;
+      transition:background .2s,color .2s,transform .1s;
+    }
+    .btn-outline:hover{
+      background:var(--primary);
+      color:#fff;
+      transform:scale(1.02);
+    }
+
+    /* ------------------- STEP INDICATOR ------------------- */
+    .step-indicator{
+      display:flex;gap:.5rem;margin-bottom:1rem;
+    }
+    .step-indicator span{
+      flex:1;height:4px;background:#ddd;border-radius:2px;
+    }
+    .step-indicator .active{background:var(--primary);}
+
+    /* ------------------- CAMPAIGN TABLE ------------------- */
+    table{
+      width:100%;border-collapse:collapse;
+    }
+    th, td{
+      padding:.8rem .5rem;text-align:left;
+    }
+    th{
+      background:var(--primary);
+      color:#fff;
+    }
+    tr:nth-child(even){background:#fafafa;}
+
+    /* ------------------- FAQ ACCORDION ------------------- */
+    .faq-item{margin-bottom:1rem}
+    .faq-question{
+      background:#fff;
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:.9rem 1rem;
+      cursor:pointer;
+      font-weight:600;
+      position:relative;
+    }
+    .faq-question::after{
+      content:'▸';
+      position:absolute;right:1rem;
+      transition:transform .2s;
+    }
+    .faq-question.active::after{transform:rotate(90deg);}
+    .faq-answer{
+      max-height:0;overflow:hidden;
+      background:#f9f9f9;
+      border-radius:0 0 var(--radius) var(--radius);
+      padding:0 1rem;
+      transition:max-height .3s ease;
+    }
+    .faq-answer p{padding:.7rem 0}
+
+    /* ------------------- FOOTER ------------------- */
+    footer{
+      background:#fff;
+      margin-top:3rem;
+      padding:2rem 1rem;
+      text-align:center;
+      font-size:.9rem;
+      color:var(--muted);
+      box-shadow:0 -1px 2px rgba(0,0,0,.04);
+    }
+    footer a{color:var(--primary);margin:0 .5rem}
+
+    /* ------------------- RESPONSIVE ------------------- */
+    @media (max-width:768px){
+      .hamburger{display:flex}
+      nav ul{
+        display:none;
+        flex-direction:column;
+        background:#fff;
+        position:absolute;top:var(--header-height);
+        left:0;width:100%;
+        box-shadow:0 4px 8px rgba(0,0,0,.08);
+      }
+      nav ul.show{display:flex}
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ==================== HEADER ==================== -->
+  <header>
+    <div class="logo"><a href="index.html">WatchTox</a></div>
+    <nav>
+      <ul id="nav-links">
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="advertisers.html" style="color:var(--primary);font-weight:600;">Advertiser</a></li>
+        <li><a href="index.html" style="color:var(--primary);font-weight:600;">Home</a></li>
+      </ul>
+    </nav>
+    <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </header>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="main">
+
+    <!-- LEFT: CREATE CAMPAIGN ------------------------------------------------- -->
+    <section class="card" data-aos="fade-up">
+      <h3>Create a New Campaign</h3>
+
+      <!-- Multi‑step indicator (visual only) -->
+      <div class="step-indicator">
+        <span class="active"></span><span></span><span></span><span></span>
+      </div>
+
+      <form id="campaignForm">
+        <!-- STEP 1 – VIDEO URL -->
+        <div class="form-group">
+          <label for="ytUrl">YouTube Video URL (must be owned by you)</label>
+          <input type="url" id="ytUrl" placeholder="https://www.youtube.com/watch?v=…" required>
+        </div>
+
+        <!-- STEP 2 – BUDGET & PRICING -->
+        <div class="form-group">
+          <label for="budget">Campaign Budget (Rs.)</label>
+          <input type="number" id="budget" min="10" placeholder="e.g., 5000" required>
+        </div>
+        <div class="form-group">
+          <label for="pricePerView">Reward per completed view (Rs.)</label>
+          <input type="number" id="pricePerView" step="0.01" min="0.01"
+                 placeholder="e.g., 0.10" required>
+        </div>
+
+        <!-- STEP 3 – TARGETING -->
+        <div class="form-group">
+          <label for="countries">Target Countries (comma‑separated ISO‑2)</label>
+          <input type="text" id="countries" placeholder="US,CA,GB" required>
+        </div>
+        <div class="form-group">
+          <label for="ageRange">Target Age Range</label>
+          <div style="display:flex;gap:.4rem;">
+            <input type="number" id="minAge" min="13" placeholder="Min" required>
+            <input type="number" id="maxAge" min="13" placeholder="Max" required>
+          </div>
+        </div>
+
+        <!-- STEP 4 – SCHEDULE -->
+        <div class="form-group">
+          <label for="startDate">Start Date</label>
+          <input type="date" id="startDate" required>
+        </div>
+        <div class="form-group">
+          <label for="endDate">End Date</label>
+          <input type="date" id="endDate" required>
+        </div>
+
+        <button type="submit" class="btn-primary">Create Campaign</button>
+      </form>
+    </section>
+
+    <!-- RIGHT: YOUR CAMPAIGNS, PERFORMANCE, FAQ ------------------------------ -->
+    <aside>
+
+      <!-- YOUR CAMPAIGNS ---------------------------------------------------- -->
+      <section class="card" data-aos="fade-up">
+        <h3>Your Campaigns</h3>
+        <table>
+          <thead>
+            <tr><th>Name</th><th>Status</th><th>Spent (Rs.)</th></tr>
+          </thead>
+          <tbody id="campaignList">
+            <!-- Demo rows – replace with API data -->
+            <tr><td>Summer Promo</td><td>Active</td><td>2,300</td></tr>
+            <tr><td>Product Launch</td><td>Paused</td><td>1,100</td></tr>
+            <tr><td>Brand Awareness</td><td>Completed</td><td>5,000</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- CAMPAIGN PERFORMANCE CHART ---------------------------------------- -->
+      <section class="card" style="margin-top:1.5rem;" data-aos="fade-up">
+        <h3>Campaign Performance (last 7 days)</h3>
+        <canvas id="perfChart" style="max-height:250px;"></canvas>
+      </section>
+
+      <!-- ADVERTISER FAQ ----------------------------------------------------- -->
+      <section class="card" style="margin-top:1.5rem;" data-aos="fade-up">
+        <h3>Advertiser FAQ</h3>
+        <div class="faq">
+          <div class="faq-item">
+            <div class="faq-question">Can I upload any YouTube video?</div>
+            <div class="faq-answer"><p>You may only promote videos that you own or have explicit permission to use. Our system verifies ownership via the YouTube Data API.</p></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">How is the cost per view calculated?</div>
+            <div class="faq-answer"><p>You set “Reward per completed view” when creating the campaign. You only pay **after a viewer has watched the required duration** (default 30 seconds).</p></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">Can I change my targeting after the campaign starts?</div>
+            <div class="faq-answer"><p>Yes. Edit the campaign in the “Your Campaigns” table – changes will take effect within a few minutes.</p></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">How do I see real‑time results?</div>
+            <div class="faq-answer"><p>The line‑chart above updates automatically (via WebSocket or periodic poll). It shows daily spend and view count.</p></div>
+          </div>
+        </div>
+      </section>
+
+    </aside>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer>
+    <p>&copy; 2026 WatchTox. All rights reserved.</p>
+    <p>
+      <a href="/terms">Terms of Service</a> |
+      <a href="/privacy">Privacy Policy</a> |
+      <a href="/contact">Contact Us</a>
+    </p>
+    <p>Follow us:
+      <a href="https://facebook.com/WatchTox" target="_blank">Facebook</a> |
+      <a href="https://twitter.com/WatchTox" target="_blank">Twitter</a> |
+      <a href="https://instagram.com/WatchTox" target="_blank">Instagram</a>
+    </p>
+  </footer>
+
+  <!-- ==================== SCRIPTS ==================== -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+  <script>
+    // ---------- Hamburger (adds .active for X animation) ----------
+    const hamburger = document.getElementById('hamburger');
+    const navLinks  = document.getElementById('nav-links');
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('show');
+      hamburger.classList.toggle('active');
+    });
+
+    // ---------- FAQ accordion ----------
+    document.querySelectorAll('.faq-question').forEach(q => {
+      q.addEventListener('click', () => {
+        const open = q.classList.toggle('active');
+        const answer = q.nextElementSibling;
+        answer.style.maxHeight = open ? answer.scrollHeight + 'px' : '0';
+      });
+    });
+
+    // ---------- Campaign form (demo only) ----------
+    const form = document.getElementById('campaignForm');
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const data = {
+        url:       document.getElementById('ytUrl').value,
+        budget:    document.getElementById('budget').value,
+        price:     document.getElementById('pricePerView').value,
+        countries: document.getElementById('countries').value,
+        minAge:    document.getElementById('minAge').value,
+        maxAge:    document.getElementById('maxAge').value,
+        start:     document.getElementById('startDate').value,
+        end:       document.getElementById('endDate').value
+      };
+      console.log('⚙️ Submit campaign:', data);
+      // 👉 Replace with fetch POST to your API
+      // fetch('/api/advertiser/campaign', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data)})
+      //   .then(r=>r.json())
+      //   .then(resp=>{ /* update UI, refresh list, show toast */ });
+      alert('✅ Campaign data logged to console – integrate with your back‑end.');
+    });
+
+    // ---------- Performance Chart (dummy data) ----------
+    const ctx = document.getElementById('perfChart').getContext('2d');
+    const perfChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+        datasets: [{
+          label: 'Spend (Rs.)',
+          data: [300,420,250,380,610,290,450],
+          backgroundColor: 'rgba(24,119,242,0.1)',
+          borderColor: 'var(--primary)',
+          borderWidth: 2,
+          tension: 0.3,
+          pointRadius: 4,
+          pointBackgroundColor: 'var(--primary)'
+        }]
+      },
+      options: {
+        responsive:true,
+        maintainAspectRatio:false,
+        plugins:{legend:{display:false}},
+        scales:{
+          y:{beginAtZero:true,ticks:{color:'var(--muted)'}},
+          x:{ticks:{color:'var(--muted)'}}
+        }
+      }
+    });
+
+    // ---------- AOS init ----------
+    document.addEventListener('DOMContentLoaded', () => {
+      AOS.init({
+        once: true,
+        duration: 600,
+        easing: 'ease-out-quart'
+      });
+    });
+  </script>
+</body>
+</html>

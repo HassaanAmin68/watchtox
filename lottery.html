@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- ==================== META ==================== -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lottery – WatchTox</title>
+  <meta name="description"
+        content="WatchTox lottery – watch videos, earn tickets and win big. Buy a ticket for just Rs. 1!">
+  <meta name="theme-color" content="#1877F2">
+
+  <!-- ==================== FONTS & ICONS ==================== -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+        rel="stylesheet">
+  <script src="https://kit.fontawesome.com/your-kit-id.js" crossorigin="anonymous"></script>
+
+  <!-- ==== AOS – Animate On Scroll (CDN) ==== -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+  <!-- ==================== STYLES ==================== -->
+  <style>
+    :root{
+      --primary:#1877F2;          /* brand blue */
+      --primary-dark:#155db2;
+      --bg:#f0f2f5;
+      --card-bg:#fff;
+      --text:#050505;
+      --muted:#65676b;
+      --radius:.8rem;
+      --shadow:0 1px 3px rgba(0,0,0,.08);
+      --header-height:60px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);}
+    a{color:inherit;text-decoration:none}
+    button{cursor:pointer;border:none;background:none;font-family:inherit}
+    ul{list-style:none}
+    html{scroll-behavior:smooth;}               /* smooth internal links */
+
+    /* ------------------- HEADER ------------------- */
+    header{
+      height:var(--header-height);
+      background:#fff;
+      box-shadow:var(--shadow);
+      display:flex;align-items:center;justify-content:space-between;
+      padding:0 1.5rem;
+      position:sticky;top:0;z-index:1000;
+    }
+    .logo{font-size:1.4rem;font-weight:700;color:var(--primary);}
+    nav ul{display:flex;gap:1.5rem}
+    nav a{
+      color:var(--muted);
+      font-weight:600;
+      position:relative;
+      transition:color .2s;
+    }
+    nav a:hover{color:var(--primary);}
+    nav a::after{
+      content:"";
+      position:absolute;
+      left:0;bottom:-3px;
+      width:0;height:2px;
+      background:var(--primary);
+      transition:width .3s;
+    }
+    nav a:hover::after{width:100%;}
+    .hamburger{
+      display:none;
+      flex-direction:column;
+      gap:4px;
+      cursor:pointer;
+    }
+    .hamburger span{
+      width:24px;height:2px;background:#333;
+      transition:transform .3s,opacity .3s;
+    }
+    .hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
+    .hamburger.active span:nth-child(2){opacity:0;}
+    .hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(6px,-6px);}
+
+    /* ------------------- MAIN LAYOUT ------------------- */
+    .main{
+      display:grid;
+      grid-template-columns:1fr minmax(240px,300px);
+      gap:1.5rem;
+      max-width:1400px;
+      margin:2rem auto;
+      padding:0 1rem;
+      opacity:0;                     /* fade‑in on page load */
+      animation:fadeIn .6s ease-out forwards;
+    }
+    @media (max-width:960px){ .main{grid-template-columns:1fr;} }
+    @keyframes fadeIn{to{opacity:1}}
+
+    /* ------------------- SHOWROOM ------------------- */
+    .showroom{
+      position:relative;
+      overflow:hidden;
+      background:#000;
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      transition:transform .2s,box-shadow .2s;
+    }
+    .showroom:hover{
+      transform:translateY(-4px);
+      box-shadow:0 8px 12px rgba(0,0,0,.15);
+    }
+    .showroom::after{
+      content:"";
+      position:absolute;top:0;right:0;bottom:0;left:0;
+      background:radial-gradient(circle at 50% 30%,rgba(255,255,255,.1),transparent 60%);
+      pointer-events:none;
+    }
+
+    /* ---------- CAR (centered, rotating) ---------- */
+    .car{
+      position:absolute;
+      bottom:8%;                     /* a little lift from the floor */
+      left:50%;
+      width:220px;
+      height:80px;
+      transform:translateX(-50%) rotate(0deg);
+      animation:spin 8s linear infinite;
+    }
+    .car .body{
+      position:absolute;
+      width:100%;height:45%;bottom:0;
+      background:#c00;
+      border-radius:10px 10px 0 0;
+    }
+    .car .roof{
+      position:absolute;
+      width:60%;height:30%;left:20%;bottom:45%;
+      background:#c00;
+      clip-path:polygon(0% 100%,20% 0%,80% 0%,100% 100%);
+    }
+    .car .wheel{
+      position:absolute;
+      width:38px;height:38px;
+      background:#333;
+      border-radius:50%;
+      bottom:-19px;               /* half sticks out */
+      box-shadow:inset 0 0 0 6px #555;
+    }
+    .car .wheel.left{ left:20%; }
+    .car .wheel.right{ right:20%; }
+    @keyframes spin{
+      0%   {transform:translateX(-50%) rotate(0deg);}
+      100% {transform:translateX(-50%) rotate(360deg);}
+    }
+
+    /* ------------------- LIGHTNING FLASH ------------------- */
+    .lightning{
+      position:absolute;top:0;right:0;bottom:0;left:0;
+      pointer-events:none;
+    }
+    .bolt{
+      position:absolute;
+      width:4px;height:100%;
+      background:rgba(255,255,255,0);
+      box-shadow:0 0 20px 10px rgba(255,255,255,.4);
+      animation:flash 2s infinite;
+    }
+    @keyframes flash{
+      0%,45%,55%,100%{background:rgba(255,255,255,0);}
+      50%{background:rgba(255,255,255,.8);}
+    }
+
+    /* ------------------- TICKET‑HOLDER TICKER ------------------- */
+    .ticker{
+      background:var(--card-bg);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      height:400px;
+      position:relative;
+      transition:transform .2s,box-shadow .2s;
+    }
+    .ticker:hover{
+      transform:translateY(-4px);
+      box-shadow:0 8px 12px rgba(0,0,0,.15);
+    }
+    .ticker h3{
+      font-size:1.2rem;color:var(--primary);
+      padding:.8rem 1rem; margin:0;
+      border-bottom:1px solid #eee;
+    }
+    .ticker ul{
+      position:absolute;
+      bottom:-100%;
+      width:100%;
+      animation:scrollUp 15s linear infinite;
+    }
+    @keyframes scrollUp{
+      0%   {bottom:-100%;}
+      100% {bottom:100%;}
+    }
+    .ticker li{
+      padding:.6rem 1rem;
+      border-bottom:1px solid #f0f0f0;
+      font-size:.95rem;
+    }
+
+    /* ------------------- TICKET PURCHASE CARD ------------------- */
+    .ticket-card{
+      grid-column:1 / -1;
+      background:var(--card-bg);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:2rem 1.5rem;
+      text-align:center;
+      transition:transform .2s,box-shadow .2s;
+    }
+    .ticket-card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 8px 12px rgba(0,0,0,.15);
+    }
+    .ticket-card h2{
+      color:var(--primary);
+      margin-bottom:.8rem;
+    }
+    .ticket-card p{
+      margin-bottom:1rem;
+      color:var(--muted);
+    }
+    .ticket-card input[type=number]{
+      width:80px;
+      padding:.5rem;
+      font-size:1rem;
+      text-align:center;
+      border:1px solid #ddd;
+      border-radius:var(--radius);
+      margin-right:.6rem;
+    }
+    .ticket-card .price{
+      font-weight:600;
+      margin-bottom:1rem;
+    }
+    .ticket-card .btn{
+      background:var(--primary);
+      color:#fff;
+      padding:.8rem 1.5rem;
+      border-radius:var(--radius);
+      font-weight:600;
+      transition:background .2s,transform .1s;
+    }
+    .ticket-card .btn:hover{
+      background:var(--primary-dark);
+      transform:scale(1.02);
+    }
+
+    /* ------------------- FOOTER ------------------- */
+    footer{
+      background:#fff;
+      margin-top:3rem;
+      padding:2rem 1rem;
+      text-align:center;
+      font-size:.9rem;
+      color:var(--muted);
+      box-shadow:0 -1px 2px rgba(0,0,0,.04);
+    }
+    footer a{color:var(--primary);margin:0 .5rem}
+
+    /* ------------------- RESPONSIVE ------------------- */
+    @media (max-width:768px){
+      .hamburger{display:flex}
+      nav ul{
+        display:none;
+        flex-direction:column;
+        background:#fff;
+        position:absolute;top:var(--header-height);
+        left:0;width:100%;
+        box-shadow:0 4px 8px rgba(0,0,0,.08);
+      }
+      nav ul.show{display:flex}
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ==================== HEADER ==================== -->
+  <header>
+    <div class="logo"><a href="../index.html">WatchTox</a></div>
+    <nav>
+      <ul id="nav-links">
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="earnings.html">Earn Money</a></li>
+        <li><a href="advertisers.html">Advertiser</a></li>
+        <li><a href="lottery.html"
+               style="color:var(--primary);font-weight:600;">Lottery</a></li>
+        <li><a href="index.html"
+               style="color:var(--primary);font-weight:600;">Home</a></li>
+      </ul>
+    </nav>
+    <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </header>
+
+  <!-- ==================== MAIN ==================== -->
+  <main class="main">
+
+    <!-- LEFT: SHOWROOM (spinning car) -->
+    <section class="showroom" data-aos="fade-up">
+      <div class="lightning"><div class="bolt"></div></div>
+
+      <!-- Pure‑CSS Car -->
+      <div class="car">
+        <div class="body"></div>
+        <div class="roof"></div>
+        <div class="wheel left"></div>
+        <div class="wheel right"></div>
+      </div>
+    </section>
+
+    <!-- RIGHT: TICKET‑HOLDER TICKER -->
+    <section class="ticker" data-aos="fade-up">
+      <h3>Recent Ticket Holders</h3>
+      <ul id="holderList">
+        <li>Rs. 1 – Ananya R.</li>
+        <li>Rs. 3 – Vikram S.</li>
+        <li>Rs. 5 – Priya K.</li>
+        <li>Rs. 2 – Rahul M.</li>
+        <li>Rs. 1 – Sneha P.</li>
+        <li>Rs. 4 – Arjun D.</li>
+        <li>Rs. 1 – Meena G.</li>
+        <li>Rs. 2 – Karan T.</li>
+        <li>Rs. 1 – Deepa L.</li>
+        <li>Rs. 5 – Nikhil O.</li>
+      </ul>
+    </section>
+
+    <!-- BOTTOM: BUY TICKET CARD -->
+    <section class="ticket-card" data-aos="fade-up">
+      <h2>Buy Lottery Ticket</h2>
+      <p>Each ticket costs <strong>Rs. 1</strong>. More tickets = higher chances of winning.</p>
+      <div class="price">Total: Rs. <span id="totalPrice">0</span></div>
+      <input type="number" id="ticketQty" min="1" value="1">
+      <button class="btn" id="buyBtn">Buy Now</button>
+    </section>
+
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer>
+    <p>&copy; 2026 WatchTox. All rights reserved.</p>
+    <p>
+      <a href="/terms">Terms of Service</a> |
+      <a href="/privacy">Privacy Policy</a> |
+      <a href="/contact">Contact Us</a>
+    </p>
+    <p>Follow us:
+      <a href="https://facebook.com/WatchTox" target="_blank">Facebook</a> |
+      <a href="https://twitter.com/WatchTox" target="_blank">Twitter</a> |
+      <a href="https://instagram.com/WatchTox" target="_blank">Instagram</a>
+    </p>
+  </footer>
+
+  <!-- ==================== SCRIPTS ==================== -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+  <script>
+    // ---------- Mobile hamburger (adds .active for X animation) ----------
+    const hamburger = document.getElementById('hamburger');
+    const navLinks  = document.getElementById('nav-links');
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('show');
+      hamburger.classList.toggle('active');
+    });
+
+    // ---------- Ticket price calculation ----------
+    const qtyInput  = document.getElementById('ticketQty');
+    const totalSpan = document.getElementById('totalPrice');
+    const buyBtn    = document.getElementById('buyBtn');
+
+    const updateTotal = () => {
+      const qty = parseInt(qtyInput.value,10) || 0;
+      totalSpan.textContent = qty;        // Rs 1 per ticket
+    };
+    qtyInput.addEventListener('input', updateTotal);
+    updateTotal();
+
+    // ---------- Buy button (demo only) ----------
+    buyBtn.addEventListener('click', () => {
+      const qty = parseInt(qtyInput.value,10);
+      if (!qty || qty < 1) {
+        alert('Please select at least one ticket.');
+        return;
+      }
+      // 👉 Replace the alert with a real fetch() to your back‑end:
+      // fetch('/api/lottery/buy', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({tickets: qty})})
+      //   .then(r=>r.json())
+      //   .then(...);
+      alert(`✅ You bought ${qty} ticket(s) for Rs. ${qty}.`);
+    });
+
+    // ---------- AOS init ----------
+    document.addEventListener('DOMContentLoaded', () => {
+      AOS.init({
+        once: true,
+        duration: 600,
+        easing: 'ease-out-quart'
+      });
+    });
+  </script>
+</body>
+</html>
